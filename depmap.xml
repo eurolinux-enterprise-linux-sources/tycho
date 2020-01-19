@@ -1,0 +1,32 @@
+<dependencies>
+<dependency>
+    <maven>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-model</artifactId>
+        <version>3.0.3</version>
+    </maven>
+    <jpp>
+        <groupId>JPP/maven</groupId>
+        <artifactId>maven-model</artifactId>
+        <version>3.0.3</version>
+    </jpp>
+</dependency>
+<!--
+     The first bootstrap build of Tycho provides the osgi bundle under the
+     same gid:aid as Eclipse. When building non-bootstrapped we should
+     explicitly depend upon Eclipse's osgi bundle, even if Tycho has
+     one available.
+-->
+<dependency>
+    <maven>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>org.eclipse.osgi</artifactId>
+        <version>0</version>
+    </maven>
+    <jpp>
+        <groupId>JPP/eclipse</groupId>
+        <artifactId>osgi</artifactId>
+        <version>0</version>
+    </jpp>
+</dependency>
+</dependencies>

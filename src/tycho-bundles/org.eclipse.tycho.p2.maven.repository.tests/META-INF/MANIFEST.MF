@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Tycho Maven/p2 Repository Integration Tests (Incubation)
+Bundle-SymbolicName: org.eclipse.tycho.p2.maven.repository.tests;singleton:=true
+Bundle-Version: 0.19.0
+Bundle-Vendor: %providerName
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Fragment-Host: org.eclipse.tycho.p2.maven.repository
+Require-Bundle: org.junit,
+ org.eclipse.equinox.p2.publisher,
+ org.eclipse.equinox.ds,
+ org.mockito
+Import-Package: org.eclipse.tycho.locking.facade,
+ org.eclipse.tycho.repository.local.testutil,
+ org.eclipse.tycho.repository.streaming.testutil,
+ org.eclipse.tycho.repository.testutil,
+ org.eclipse.tycho.test.util

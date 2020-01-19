@@ -1,0 +1,215 @@
+From 3db92ab9ddeecb949f0b45a4bd527a4b0b62444d Mon Sep 17 00:00:00 2001
+From: Roland Grunberg <rgrunber@redhat.com>
+Date: Tue, 12 Jun 2012 09:56:38 -0400
+Subject: [PATCH] Fix the Tycho build to work on Fedora.
+
+Minor fixes of limited scope needed to have Tycho building on Fedora.
+
+Remove org.eclipse.equinox.concurrent until present in Fedora Eclipse.
+
+Tycho upstream currently depends upon 0.15.0 when building
+0.16.0-SNAPSHOT, which doesn't have reactor plugin version checking. In
+Fedora we depend on the previously built version which has that version
+checking. We must keep previous build version strings different to avoid
+a cyclic dependency, but doing so causes the version checking to fail,
+so we must provide a way to disable it. Disable by default.
+
+Update to using Jetty 9 API.
+
+Change-Id: Ic8c0514c1fa10ee53580d2654ac6a363ccd66814
+---
+ pom.xml                                                       |  5 -----
+ tycho-artifactcomparator/pom.xml                              |  4 ++--
+ .../META-INF/MANIFEST.MF                                      |  2 +-
+ .../org.eclipse.tycho.p2.maven.repository.tests/pom.xml       |  2 +-
+ .../eclipse/tycho/p2/target/ee/CustomEEResolutionHandler.java |  2 +-
+ .../src/main/java/org/eclipse/tycho/test/util/HttpServer.java |  8 ++++++--
+ .../tycho-bundles-external/tycho-bundles-external.product     |  1 -
+ .../tycho-standalone-p2-director/p2 Director.product          |  1 -
+ tycho-compiler-jdt/pom.xml                                    |  4 ----
+ .../tycho/core/maven/TychoMavenLifecycleParticipant.java      |  4 +++-
+ .../org/eclipse/tycho/test/AbstractTychoIntegrationTest.java  | 11 +++++------
+ 11 files changed, 19 insertions(+), 25 deletions(-)
+
+diff --git a/pom.xml b/pom.xml
+index 273ca9e..5587d84 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -242,11 +242,6 @@ $CMD -DpomFile=org.eclipse.jdt.compiler.apt.pom \
+ 				<version>${jdtVersion}</version>
+ 			</dependency>
+ 			<dependency>
+-				<groupId>org.eclipse.tycho</groupId>
+-				<artifactId>org.eclipse.jdt.compiler.apt</artifactId>
+-				<version>${jdtAptVersion}</version>
+-			</dependency>			                        
+-			<dependency>
+ 				<groupId>org.apache.maven.surefire</groupId>
+ 				<artifactId>surefire-booter</artifactId>
+ 				<version>2.10</version>
+diff --git a/tycho-artifactcomparator/pom.xml b/tycho-artifactcomparator/pom.xml
+index ef8182a..80c7312 100644
+--- a/tycho-artifactcomparator/pom.xml
++++ b/tycho-artifactcomparator/pom.xml
+@@ -24,7 +24,7 @@
+     <dependency>
+       <!-- CQ https://dev.eclipse.org/ipzilla/show_bug.cgi?id=6591 -->
+       <groupId>org.ow2.asm</groupId>
+-      <artifactId>asm-debug-all</artifactId>
++      <artifactId>asm-all</artifactId>
+       <version>4.0</version>
+     </dependency>
+     <dependency>
+@@ -54,4 +54,4 @@
+       </plugin>
+     </plugins>
+   </build>
+-</project>
+\ No newline at end of file
++</project>
+diff --git a/tycho-bundles/org.eclipse.tycho.p2.maven.repository.tests/META-INF/MANIFEST.MF b/tycho-bundles/org.eclipse.tycho.p2.maven.repository.tests/META-INF/MANIFEST.MF
+index 1d0965a..0a01dd5 100644
+--- a/tycho-bundles/org.eclipse.tycho.p2.maven.repository.tests/META-INF/MANIFEST.MF
++++ b/tycho-bundles/org.eclipse.tycho.p2.maven.repository.tests/META-INF/MANIFEST.MF
+@@ -9,7 +9,7 @@ Fragment-Host: org.eclipse.tycho.p2.maven.repository
+ Require-Bundle: org.junit,
+  org.eclipse.equinox.p2.publisher,
+  org.eclipse.equinox.ds,
+- org.mockito
++ org.mockito.mockito-core
+ Import-Package: org.eclipse.tycho.locking.facade,
+  org.eclipse.tycho.repository.local.testutil,
+  org.eclipse.tycho.repository.streaming.testutil,
+diff --git a/tycho-bundles/org.eclipse.tycho.p2.maven.repository.tests/pom.xml b/tycho-bundles/org.eclipse.tycho.p2.maven.repository.tests/pom.xml
+index 51dba13..9b2ffca 100644
+--- a/tycho-bundles/org.eclipse.tycho.p2.maven.repository.tests/pom.xml
++++ b/tycho-bundles/org.eclipse.tycho.p2.maven.repository.tests/pom.xml
+@@ -37,7 +37,7 @@
+ 							<!-- 403196 give p2 resolver a hint so that package imports of org.mockito can be resolved -->
+ 							<requirement>
+ 								<type>eclipse-plugin</type>
+-								<id>org.hamcrest</id>
++								<id>org.hamcrest.core</id>
+ 								<versionRange>0.0.0</versionRange>
+ 							</requirement>
+ 						</extraRequirements>
+diff --git a/tycho-bundles/org.eclipse.tycho.p2.resolver.impl/src/main/java/org/eclipse/tycho/p2/target/ee/CustomEEResolutionHandler.java b/tycho-bundles/org.eclipse.tycho.p2.resolver.impl/src/main/java/org/eclipse/tycho/p2/target/ee/CustomEEResolutionHandler.java
+index 87c9e11..927cea5 100644
+--- a/tycho-bundles/org.eclipse.tycho.p2.resolver.impl/src/main/java/org/eclipse/tycho/p2/target/ee/CustomEEResolutionHandler.java
++++ b/tycho-bundles/org.eclipse.tycho.p2.resolver.impl/src/main/java/org/eclipse/tycho/p2/target/ee/CustomEEResolutionHandler.java
+@@ -59,7 +59,7 @@ class CustomEEResolutionHandler extends ExecutionEnvironmentResolutionHandler {
+             String name = capability.getName();
+             String version = capability.getVersion().toString();
+ 
+-            if (JREAction.NAMESPACE_OSGI_EE.equals(namespace)) {
++            if ("osgi.ee".equals(namespace)) {
+                 result.add(new SystemCapability(Type.OSGI_EE, name, version));
+             } else if (PublisherHelper.CAPABILITY_NS_JAVA_PACKAGE.equals(namespace)) {
+                 result.add(new SystemCapability(Type.JAVA_PACKAGE, name, version));
+diff --git a/tycho-bundles/org.eclipse.tycho.test.utils/src/main/java/org/eclipse/tycho/test/util/HttpServer.java b/tycho-bundles/org.eclipse.tycho.test.utils/src/main/java/org/eclipse/tycho/test/util/HttpServer.java
+index 57b4e10..47423e5 100644
+--- a/tycho-bundles/org.eclipse.tycho.test.utils/src/main/java/org/eclipse/tycho/test/util/HttpServer.java
++++ b/tycho-bundles/org.eclipse.tycho.test.utils/src/main/java/org/eclipse/tycho/test/util/HttpServer.java
+@@ -17,9 +17,13 @@ import java.util.List;
+ import java.util.Map;
+ import java.util.Random;
+ 
++import org.eclipse.jetty.security.ConstraintMapping;
++import org.eclipse.jetty.security.ConstraintSecurityHandler;
++import org.eclipse.jetty.security.HashLoginService;
++import org.eclipse.jetty.server.AbstractNetworkConnector;
+ import org.eclipse.jetty.server.Connector;
+ import org.eclipse.jetty.server.Server;
+-import org.eclipse.jetty.server.bio.SocketConnector;
++import org.eclipse.jetty.server.ServerConnector;
+ import org.eclipse.jetty.servlet.ServletContextHandler;
+ import org.eclipse.jetty.servlet.ServletHolder;
+ import org.junit.rules.ExternalResource;
+@@ -77,7 +81,7 @@ public class HttpServer extends ExternalResource {
+ 
+     private static RunningServer startServerOnPort(int port) throws Exception {
+         Server jetty = new Server();
+-        Connector connector = new SocketConnector();
++        AbstractNetworkConnector connector = new ServerConnector(jetty);
+         connector.setPort(port);
+         jetty.addConnector(connector);
+ 
+diff --git a/tycho-bundles/tycho-bundles-external/tycho-bundles-external.product b/tycho-bundles/tycho-bundles-external/tycho-bundles-external.product
+index 7ef22f6..d4cb907 100644
+--- a/tycho-bundles/tycho-bundles-external/tycho-bundles-external.product
++++ b/tycho-bundles/tycho-bundles-external/tycho-bundles-external.product
+@@ -42,7 +42,6 @@
+       <plugin id="org.eclipse.ecf.ssl" fragment="true"/>
+       <plugin id="org.eclipse.equinox.app"/>
+       <plugin id="org.eclipse.equinox.common"/>
+-      <plugin id="org.eclipse.equinox.concurrent"/>
+       <plugin id="org.eclipse.equinox.ds"/>
+       <plugin id="org.eclipse.equinox.frameworkadmin"/>
+       <plugin id="org.eclipse.equinox.frameworkadmin.equinox"/>
+diff --git a/tycho-bundles/tycho-standalone-p2-director/p2 Director.product b/tycho-bundles/tycho-standalone-p2-director/p2 Director.product
+index 62b354d..11f65fb 100644
+--- a/tycho-bundles/tycho-standalone-p2-director/p2 Director.product	
++++ b/tycho-bundles/tycho-standalone-p2-director/p2 Director.product	
+@@ -42,7 +42,6 @@
+       <plugin id="org.eclipse.ecf.ssl" fragment="true"/>
+       <plugin id="org.eclipse.equinox.app"/>
+       <plugin id="org.eclipse.equinox.common"/>
+-      <plugin id="org.eclipse.equinox.concurrent"/>
+       <plugin id="org.eclipse.equinox.ds"/>
+       <plugin id="org.eclipse.equinox.frameworkadmin"/>
+       <plugin id="org.eclipse.equinox.frameworkadmin.equinox"/>
+diff --git a/tycho-compiler-jdt/pom.xml b/tycho-compiler-jdt/pom.xml
+index 790e756..9d83c7c 100644
+--- a/tycho-compiler-jdt/pom.xml
++++ b/tycho-compiler-jdt/pom.xml
+@@ -38,10 +38,6 @@
+ 			<artifactId>org.eclipse.jdt.core</artifactId>
+ 		</dependency>
+ 		<dependency>
+-			<groupId>org.eclipse.tycho</groupId>
+-			<artifactId>org.eclipse.jdt.compiler.apt</artifactId>
+-		</dependency>
+-		<dependency>
+ 			<groupId>org.codehaus.plexus</groupId>
+ 			<artifactId>plexus-compiler-api</artifactId>
+ 		</dependency>
+diff --git a/tycho-core/src/main/java/org/eclipse/tycho/core/maven/TychoMavenLifecycleParticipant.java b/tycho-core/src/main/java/org/eclipse/tycho/core/maven/TychoMavenLifecycleParticipant.java
+index 08daf3c..d003619 100644
+--- a/tycho-core/src/main/java/org/eclipse/tycho/core/maven/TychoMavenLifecycleParticipant.java
++++ b/tycho-core/src/main/java/org/eclipse/tycho/core/maven/TychoMavenLifecycleParticipant.java
+@@ -77,7 +77,9 @@ public class TychoMavenLifecycleParticipant extends AbstractMavenLifecyclePartic
+     }
+ 
+     private void validate(List<MavenProject> projects) throws MavenExecutionException {
+-        validateConsistentTychoVersion(projects);
++        if (System.getProperty("tycho.enableVersionCheck") != null) {
++            validateConsistentTychoVersion(projects);
++        }
+         validateUniqueBaseDirs(projects);
+     }
+ 
+diff --git a/tycho-testing-harness/src/main/java/org/eclipse/tycho/test/AbstractTychoIntegrationTest.java b/tycho-testing-harness/src/main/java/org/eclipse/tycho/test/AbstractTychoIntegrationTest.java
+index a8173df..cf2cf57 100644
+--- a/tycho-testing-harness/src/main/java/org/eclipse/tycho/test/AbstractTychoIntegrationTest.java
++++ b/tycho-testing-harness/src/main/java/org/eclipse/tycho/test/AbstractTychoIntegrationTest.java
+@@ -110,12 +110,11 @@ public abstract class AbstractTychoIntegrationTest {
+             verifier.getCliOptions().add(customOptions);
+         }
+ 
+-        if (System.getProperty(SYSPROP_STATELOCATION) != null) {
+-            verifier.setForkJvm(false);
+-            String m2eresolver = System.getProperty("tychodev-maven.ext.class.path"); // XXX
+-            if (m2eresolver != null) {
+-                verifier.addCliOption("-Dmaven.ext.class.path=" + m2eresolver);
+-            }
++        String m2eState = System.getProperty("m2eclipse.workspace.state");
++        String m2eResolver = System.getProperty("m2eclipse.workspace.resolver");
++
++        if (m2eState != null && m2eResolver != null) {
++            verifier.getVerifierProperties().put("m2eclipse.workspace.state", m2eState);
+         }
+ 
+         return verifier;
+-- 
+1.8.3.1
+

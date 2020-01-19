@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="spir.example-feature"
+      label="Example Feature"
+      version="1.0.0">
+
+   <!-- Minimal set of plugins for a RCP application -->
+   <!-- Include plugins (instead of require) to lock on specific version,
+        common use-case of org.eclipse.rcp/org.eclipse.e4.rcp features -->
+   <plugin
+         id="org.eclipse.equinox.app"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.equinox.launcher"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.core.runtime"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

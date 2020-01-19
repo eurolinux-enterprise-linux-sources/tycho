@@ -1,0 +1,76 @@
+/*******************************************************************************
+ * Copyright (c) 2008, 2011 Sonatype Inc. and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Sonatype Inc. - initial API and implementation
+ *******************************************************************************/
+package org.eclipse.tycho.model;
+
+import de.pdark.decentxml.Element;
+
+public class FeatureRef {
+
+    protected final Element dom;
+
+    public FeatureRef(Element dom) {
+        this.dom = dom;
+    }
+
+    public FeatureRef(String name) {
+        this(new Element(name));
+    }
+
+    public String getId() {
+        return dom.getAttributeValue("id");
+    }
+
+    public void setId(String id) {
+        dom.setAttribute("id", id);
+    }
+
+    public String getVersion() {
+        return dom.getAttributeValue("version");
+    }
+
+    public void setVersion(String version) {
+        dom.setAttribute("version", version);
+    }
+
+    @Override
+    public String toString() {
+        return getId() + "_" + getVersion();
+    }
+
+    public String getOS() {
+        return dom.getAttributeValue("os");
+    }
+
+    public void setOS(String value) {
+        dom.setAttribute("os", value);
+    }
+
+    public String getArch() {
+        return dom.getAttributeValue("arch");
+    }
+
+    public void setArch(String value) {
+        dom.setAttribute("arch", value);
+    }
+
+    public String getWS() {
+        return dom.getAttributeValue("ws");
+    }
+
+    public void setWS(String value) {
+        dom.setAttribute("ws", value);
+    }
+
+    public Element getDom() {
+        return dom;
+    }
+
+}

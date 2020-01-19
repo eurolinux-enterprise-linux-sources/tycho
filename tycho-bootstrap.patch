@@ -1,0 +1,867 @@
+diff --git a/pom.xml b/pom.xml
+index 5587d84..c02d405 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -63,7 +63,7 @@
+ 
+ 	<groupId>org.eclipse.tycho</groupId>
+ 	<artifactId>tycho</artifactId>
+-	<version>0.19.0</version>
++	<version>0.19.0-SNAPSHOT</version>
+ 	<packaging>pom</packaging>
+ 
+ 	<name>Tycho (Incubation)</name>
+diff --git a/sisu-equinox/pom.xml b/sisu-equinox/pom.xml
+index 2b45d16..44c0f29 100644
+--- a/sisu-equinox/pom.xml
++++ b/sisu-equinox/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>sisu-equinox</artifactId>
+diff --git a/sisu-equinox/sisu-equinox-api/pom.xml b/sisu-equinox/sisu-equinox-api/pom.xml
+index d78e16b..46fa01b 100644
+--- a/sisu-equinox/sisu-equinox-api/pom.xml
++++ b/sisu-equinox/sisu-equinox-api/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>sisu-equinox</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 	<artifactId>sisu-equinox-api</artifactId>
+ 
+diff --git a/sisu-equinox/sisu-equinox-embedder/pom.xml b/sisu-equinox/sisu-equinox-embedder/pom.xml
+index 58850e0..e8ecc1d 100644
+--- a/sisu-equinox/sisu-equinox-embedder/pom.xml
++++ b/sisu-equinox/sisu-equinox-embedder/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>sisu-equinox</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 	<artifactId>sisu-equinox-embedder</artifactId>
+ 
+diff --git a/sisu-equinox/sisu-equinox-launching/pom.xml b/sisu-equinox/sisu-equinox-launching/pom.xml
+index 30b9b7d..51c6cba 100644
+--- a/sisu-equinox/sisu-equinox-launching/pom.xml
++++ b/sisu-equinox/sisu-equinox-launching/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>sisu-equinox</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 	<artifactId>sisu-equinox-launching</artifactId>
+ 
+diff --git a/target-platform-configuration/pom.xml b/target-platform-configuration/pom.xml
+index 8317a4d..dcadc04 100644
+--- a/target-platform-configuration/pom.xml
++++ b/target-platform-configuration/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<artifactId>tycho</artifactId>
+ 		<groupId>org.eclipse.tycho</groupId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>target-platform-configuration</artifactId>
+diff --git a/tycho-artifactcomparator/pom.xml b/tycho-artifactcomparator/pom.xml
+index 80c7312..4a593ab 100644
+--- a/tycho-artifactcomparator/pom.xml
++++ b/tycho-artifactcomparator/pom.xml
+@@ -16,7 +16,7 @@
+   <parent>
+     <groupId>org.eclipse.tycho</groupId>
+     <artifactId>tycho</artifactId>
+-    <version>0.19.0</version>
++    <version>0.19.0-SNAPSHOT</version>
+   </parent>
+   <artifactId>tycho-artifactcomparator</artifactId>
+ 
+diff --git a/tycho-bundles/org.eclipse.tycho.core.shared.tests/META-INF/MANIFEST.MF b/tycho-bundles/org.eclipse.tycho.core.shared.tests/META-INF/MANIFEST.MF
+index 4f5e051..723e0e6 100644
+--- a/tycho-bundles/org.eclipse.tycho.core.shared.tests/META-INF/MANIFEST.MF
++++ b/tycho-bundles/org.eclipse.tycho.core.shared.tests/META-INF/MANIFEST.MF
+@@ -2,7 +2,7 @@ Manifest-Version: 1.0
+ Bundle-ManifestVersion: 2
+ Bundle-Name: Tycho Core Maven/OSGi Shared Classes Tests (Incubation)
+ Bundle-SymbolicName: org.eclipse.tycho.core.shared.tests
+-Bundle-Version: 0.19.0
++Bundle-Version: 0.19.0.qualifier
+ Fragment-Host: org.eclipse.tycho.core.shared
+ Bundle-RequiredExecutionEnvironment: J2SE-1.5
+ Require-Bundle: org.junit;bundle-version="4.8.2"
+diff --git a/tycho-bundles/org.eclipse.tycho.core.shared.tests/pom.xml b/tycho-bundles/org.eclipse.tycho.core.shared.tests/pom.xml
+index 01ec0d1..190df24 100644
+--- a/tycho-bundles/org.eclipse.tycho.core.shared.tests/pom.xml
++++ b/tycho-bundles/org.eclipse.tycho.core.shared.tests/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho-bundles</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>org.eclipse.tycho.core.shared.tests</artifactId>
+diff --git a/tycho-bundles/org.eclipse.tycho.core.shared/META-INF/MANIFEST.MF b/tycho-bundles/org.eclipse.tycho.core.shared/META-INF/MANIFEST.MF
+index ff7539b..2c9c0b2 100644
+--- a/tycho-bundles/org.eclipse.tycho.core.shared/META-INF/MANIFEST.MF
++++ b/tycho-bundles/org.eclipse.tycho.core.shared/META-INF/MANIFEST.MF
+@@ -1,7 +1,7 @@
+ Manifest-Version: 1.0
+ Bundle-ManifestVersion: 2
+ Bundle-SymbolicName: org.eclipse.tycho.core.shared
+-Bundle-Version: 0.19.0
++Bundle-Version: 0.19.0.qualifier
+ Bundle-Name: Tycho Core Maven/OSGi Shared Classes (Incubation)
+ Bundle-Vendor: %providerName
+ Export-Package: org.eclipse.tycho.artifacts,
+diff --git a/tycho-bundles/org.eclipse.tycho.core.shared/pom.xml b/tycho-bundles/org.eclipse.tycho.core.shared/pom.xml
+index 4340b63..b2ed026 100644
+--- a/tycho-bundles/org.eclipse.tycho.core.shared/pom.xml
++++ b/tycho-bundles/org.eclipse.tycho.core.shared/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho-bundles</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>org.eclipse.tycho.core.shared</artifactId>
+diff --git a/tycho-bundles/org.eclipse.tycho.embedder.shared/META-INF/MANIFEST.MF b/tycho-bundles/org.eclipse.tycho.embedder.shared/META-INF/MANIFEST.MF
+index 5c74d3f..6bbd9b5 100644
+--- a/tycho-bundles/org.eclipse.tycho.embedder.shared/META-INF/MANIFEST.MF
++++ b/tycho-bundles/org.eclipse.tycho.embedder.shared/META-INF/MANIFEST.MF
+@@ -1,7 +1,7 @@
+ Manifest-Version: 1.0
+ Bundle-ManifestVersion: 2
+ Bundle-SymbolicName: org.eclipse.tycho.embedder.shared
+-Bundle-Version: 0.19.0
++Bundle-Version: 0.19.0.qualifier
+ Bundle-Name: Tycho Embedder API Maven/OSGi Shared Classes (Incubation)
+ Bundle-Vendor: %providerName
+ Bundle-RequiredExecutionEnvironment: J2SE-1.5
+diff --git a/tycho-bundles/org.eclipse.tycho.embedder.shared/pom.xml b/tycho-bundles/org.eclipse.tycho.embedder.shared/pom.xml
+index d626fcf..be19cd0 100644
+--- a/tycho-bundles/org.eclipse.tycho.embedder.shared/pom.xml
++++ b/tycho-bundles/org.eclipse.tycho.embedder.shared/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho-bundles</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>org.eclipse.tycho.embedder.shared</artifactId>
+diff --git a/tycho-bundles/org.eclipse.tycho.noopsecurity/META-INF/MANIFEST.MF b/tycho-bundles/org.eclipse.tycho.noopsecurity/META-INF/MANIFEST.MF
+index d8ebe77..5d6f08d 100644
+--- a/tycho-bundles/org.eclipse.tycho.noopsecurity/META-INF/MANIFEST.MF
++++ b/tycho-bundles/org.eclipse.tycho.noopsecurity/META-INF/MANIFEST.MF
+@@ -2,7 +2,7 @@ Manifest-Version: 1.0
+ Bundle-ManifestVersion: 2
+ Bundle-Name: Tycho Noop Equinox password provider (Incubation)
+ Bundle-SymbolicName: org.eclipse.tycho.noopsecurity;singleton:=true
+-Bundle-Version: 0.19.0
++Bundle-Version: 0.19.0.qualifier
+ Require-Bundle: org.eclipse.equinox.security;bundle-version="1.0.100"
+ Bundle-RequiredExecutionEnvironment: J2SE-1.5
+ Bundle-ActivationPolicy: lazy
+diff --git a/tycho-bundles/org.eclipse.tycho.noopsecurity/pom.xml b/tycho-bundles/org.eclipse.tycho.noopsecurity/pom.xml
+index a8f2973..0881a10 100644
+--- a/tycho-bundles/org.eclipse.tycho.noopsecurity/pom.xml
++++ b/tycho-bundles/org.eclipse.tycho.noopsecurity/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho-bundles</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>org.eclipse.tycho.noopsecurity</artifactId>
+diff --git a/tycho-bundles/org.eclipse.tycho.p2.maven.repository.tests/META-INF/MANIFEST.MF b/tycho-bundles/org.eclipse.tycho.p2.maven.repository.tests/META-INF/MANIFEST.MF
+index 0a01dd5..7420336 100644
+--- a/tycho-bundles/org.eclipse.tycho.p2.maven.repository.tests/META-INF/MANIFEST.MF
++++ b/tycho-bundles/org.eclipse.tycho.p2.maven.repository.tests/META-INF/MANIFEST.MF
+@@ -2,7 +2,7 @@ Manifest-Version: 1.0
+ Bundle-ManifestVersion: 2
+ Bundle-Name: Tycho Maven/p2 Repository Integration Tests (Incubation)
+ Bundle-SymbolicName: org.eclipse.tycho.p2.maven.repository.tests;singleton:=true
+-Bundle-Version: 0.19.0
++Bundle-Version: 0.19.0.qualifier
+ Bundle-Vendor: %providerName
+ Bundle-RequiredExecutionEnvironment: J2SE-1.5
+ Fragment-Host: org.eclipse.tycho.p2.maven.repository
+diff --git a/tycho-bundles/org.eclipse.tycho.p2.maven.repository.tests/pom.xml b/tycho-bundles/org.eclipse.tycho.p2.maven.repository.tests/pom.xml
+index 9b2ffca..c2f6f40 100644
+--- a/tycho-bundles/org.eclipse.tycho.p2.maven.repository.tests/pom.xml
++++ b/tycho-bundles/org.eclipse.tycho.p2.maven.repository.tests/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho-bundles</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>org.eclipse.tycho.p2.maven.repository.tests</artifactId>
+diff --git a/tycho-bundles/org.eclipse.tycho.p2.maven.repository/META-INF/MANIFEST.MF b/tycho-bundles/org.eclipse.tycho.p2.maven.repository/META-INF/MANIFEST.MF
+index 158e8ba..6db6be7 100644
+--- a/tycho-bundles/org.eclipse.tycho.p2.maven.repository/META-INF/MANIFEST.MF
++++ b/tycho-bundles/org.eclipse.tycho.p2.maven.repository/META-INF/MANIFEST.MF
+@@ -2,7 +2,7 @@ Manifest-Version: 1.0
+ Bundle-ManifestVersion: 2
+ Bundle-Name: Tycho Maven/p2 Repository Integration (Incubation)
+ Bundle-SymbolicName: org.eclipse.tycho.p2.maven.repository;singleton:=true
+-Bundle-Version: 0.19.0
++Bundle-Version: 0.19.0.qualifier
+ Bundle-Vendor: %providerName
+ Bundle-RequiredExecutionEnvironment: J2SE-1.5
+ Bundle-ActivationPolicy: lazy
+diff --git a/tycho-bundles/org.eclipse.tycho.p2.maven.repository/pom.xml b/tycho-bundles/org.eclipse.tycho.p2.maven.repository/pom.xml
+index 9f9d665..609ded2 100644
+--- a/tycho-bundles/org.eclipse.tycho.p2.maven.repository/pom.xml
++++ b/tycho-bundles/org.eclipse.tycho.p2.maven.repository/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho-bundles</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>org.eclipse.tycho.p2.maven.repository</artifactId>
+diff --git a/tycho-bundles/org.eclipse.tycho.p2.resolver.impl.test/META-INF/MANIFEST.MF b/tycho-bundles/org.eclipse.tycho.p2.resolver.impl.test/META-INF/MANIFEST.MF
+index 78699a7..8cb0f6d 100644
+--- a/tycho-bundles/org.eclipse.tycho.p2.resolver.impl.test/META-INF/MANIFEST.MF
++++ b/tycho-bundles/org.eclipse.tycho.p2.resolver.impl.test/META-INF/MANIFEST.MF
+@@ -2,7 +2,7 @@ Manifest-Version: 1.0
+ Bundle-ManifestVersion: 2
+ Bundle-Name: Tycho p2 Resolver Bundle Tests (Incubation)
+ Bundle-SymbolicName: org.eclipse.tycho.p2.resolver.impl.test;singleton:=true
+-Bundle-Version: 0.19.0
++Bundle-Version: 0.19.0.qualifier
+ Bundle-RequiredExecutionEnvironment: J2SE-1.5
+ Fragment-Host: org.eclipse.tycho.p2.resolver.impl
+ Require-Bundle: org.junit,
+diff --git a/tycho-bundles/org.eclipse.tycho.p2.resolver.impl.test/pom.xml b/tycho-bundles/org.eclipse.tycho.p2.resolver.impl.test/pom.xml
+index 1718b37..ccef253 100644
+--- a/tycho-bundles/org.eclipse.tycho.p2.resolver.impl.test/pom.xml
++++ b/tycho-bundles/org.eclipse.tycho.p2.resolver.impl.test/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho-bundles</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>org.eclipse.tycho.p2.resolver.impl.test</artifactId>
+diff --git a/tycho-bundles/org.eclipse.tycho.p2.resolver.impl/META-INF/MANIFEST.MF b/tycho-bundles/org.eclipse.tycho.p2.resolver.impl/META-INF/MANIFEST.MF
+index 6636b0d..84064ef 100644
+--- a/tycho-bundles/org.eclipse.tycho.p2.resolver.impl/META-INF/MANIFEST.MF
++++ b/tycho-bundles/org.eclipse.tycho.p2.resolver.impl/META-INF/MANIFEST.MF
+@@ -2,7 +2,7 @@ Manifest-Version: 1.0
+ Bundle-ManifestVersion: 2
+ Bundle-Name: Tycho p2 Resolver Bundle (Incubation)
+ Bundle-SymbolicName: org.eclipse.tycho.p2.resolver.impl;singleton:=true
+-Bundle-Version: 0.19.0
++Bundle-Version: 0.19.0.qualifier
+ Bundle-Activator: org.eclipse.tycho.p2.impl.Activator
+ Require-Bundle: org.eclipse.core.runtime,
+  org.eclipse.equinox.security;bundle-version="1.0.100",
+diff --git a/tycho-bundles/org.eclipse.tycho.p2.resolver.impl/pom.xml b/tycho-bundles/org.eclipse.tycho.p2.resolver.impl/pom.xml
+index 58c000b..81f93cc 100644
+--- a/tycho-bundles/org.eclipse.tycho.p2.resolver.impl/pom.xml
++++ b/tycho-bundles/org.eclipse.tycho.p2.resolver.impl/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho-bundles</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>org.eclipse.tycho.p2.resolver.impl</artifactId>
+diff --git a/tycho-bundles/org.eclipse.tycho.p2.resolver.shared/META-INF/MANIFEST.MF b/tycho-bundles/org.eclipse.tycho.p2.resolver.shared/META-INF/MANIFEST.MF
+index eb9042e..6e229b1 100644
+--- a/tycho-bundles/org.eclipse.tycho.p2.resolver.shared/META-INF/MANIFEST.MF
++++ b/tycho-bundles/org.eclipse.tycho.p2.resolver.shared/META-INF/MANIFEST.MF
+@@ -5,7 +5,7 @@ Export-Package:
+  org.eclipse.tycho.p2.resolver.facade,
+  org.eclipse.tycho.p2.target.facade,
+  org.eclipse.tycho.repository.registry.facade
+-Bundle-Version: 0.19.0
++Bundle-Version: 0.19.0.qualifier
+ Bundle-Name: Tycho p2 Resolver Maven/OSGi Shared Classes (Incubation)
+ Bundle-ManifestVersion: 2
+ Bundle-Description: Tycho integrates Maven with Eclipse and OSGi
+diff --git a/tycho-bundles/org.eclipse.tycho.p2.resolver.shared/pom.xml b/tycho-bundles/org.eclipse.tycho.p2.resolver.shared/pom.xml
+index bb99f46..3a94796 100644
+--- a/tycho-bundles/org.eclipse.tycho.p2.resolver.shared/pom.xml
++++ b/tycho-bundles/org.eclipse.tycho.p2.resolver.shared/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho-bundles</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>org.eclipse.tycho.p2.resolver.shared</artifactId>
+diff --git a/tycho-bundles/org.eclipse.tycho.p2.tools.impl/META-INF/MANIFEST.MF b/tycho-bundles/org.eclipse.tycho.p2.tools.impl/META-INF/MANIFEST.MF
+index 41b8d67..cc8fd1f 100644
+--- a/tycho-bundles/org.eclipse.tycho.p2.tools.impl/META-INF/MANIFEST.MF
++++ b/tycho-bundles/org.eclipse.tycho.p2.tools.impl/META-INF/MANIFEST.MF
+@@ -1,5 +1,5 @@
+ Manifest-Version: 1.0
+-Bundle-Version: 0.19.0
++Bundle-Version: 0.19.0.qualifier
+ Bundle-Name: Tycho p2 Tools Bundle (Incubation)
+ Bundle-ManifestVersion: 2
+ Bundle-Description: Implementation of tools for generating, copying, and using p2 repositories in Tycho
+diff --git a/tycho-bundles/org.eclipse.tycho.p2.tools.impl/pom.xml b/tycho-bundles/org.eclipse.tycho.p2.tools.impl/pom.xml
+index c6fef06..9840230 100644
+--- a/tycho-bundles/org.eclipse.tycho.p2.tools.impl/pom.xml
++++ b/tycho-bundles/org.eclipse.tycho.p2.tools.impl/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho-bundles</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>org.eclipse.tycho.p2.tools.impl</artifactId>
+diff --git a/tycho-bundles/org.eclipse.tycho.p2.tools.shared/META-INF/MANIFEST.MF b/tycho-bundles/org.eclipse.tycho.p2.tools.shared/META-INF/MANIFEST.MF
+index c3d5acb..e920521 100644
+--- a/tycho-bundles/org.eclipse.tycho.p2.tools.shared/META-INF/MANIFEST.MF
++++ b/tycho-bundles/org.eclipse.tycho.p2.tools.shared/META-INF/MANIFEST.MF
+@@ -1,5 +1,5 @@
+ Manifest-Version: 1.0
+-Bundle-Version: 0.19.0
++Bundle-Version: 0.19.0.qualifier
+ Bundle-Name: Tycho p2 Tools Maven/OSGi Shared Classes (Incubation)
+ Bundle-ManifestVersion: 2
+ Bundle-Description: Exposes tools for manipulating p2 data, which are implemented in OSGi bundles, to Maven plug-ins
+diff --git a/tycho-bundles/org.eclipse.tycho.p2.tools.shared/pom.xml b/tycho-bundles/org.eclipse.tycho.p2.tools.shared/pom.xml
+index 46596e2..e7fb5ef 100644
+--- a/tycho-bundles/org.eclipse.tycho.p2.tools.shared/pom.xml
++++ b/tycho-bundles/org.eclipse.tycho.p2.tools.shared/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho-bundles</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>org.eclipse.tycho.p2.tools.shared</artifactId>
+diff --git a/tycho-bundles/org.eclipse.tycho.p2.tools.tests/META-INF/MANIFEST.MF b/tycho-bundles/org.eclipse.tycho.p2.tools.tests/META-INF/MANIFEST.MF
+index 04d1ab7..04fd5a2 100644
+--- a/tycho-bundles/org.eclipse.tycho.p2.tools.tests/META-INF/MANIFEST.MF
++++ b/tycho-bundles/org.eclipse.tycho.p2.tools.tests/META-INF/MANIFEST.MF
+@@ -2,7 +2,7 @@ Manifest-Version: 1.0
+ Bundle-ManifestVersion: 2
+ Bundle-Name: Tycho p2 Tools Tests (Incubation)
+ Bundle-SymbolicName: org.eclipse.tycho.p2.tools.tests
+-Bundle-Version: 0.19.0
++Bundle-Version: 0.19.0.qualifier
+ Bundle-RequiredExecutionEnvironment: J2SE-1.5
+ Fragment-Host: org.eclipse.tycho.p2.tools.impl
+ Require-Bundle: org.junit;bundle-version="[4.8.1,5.0.0)",
+diff --git a/tycho-bundles/org.eclipse.tycho.p2.tools.tests/pom.xml b/tycho-bundles/org.eclipse.tycho.p2.tools.tests/pom.xml
+index 8919cc6..6a1e2eb 100644
+--- a/tycho-bundles/org.eclipse.tycho.p2.tools.tests/pom.xml
++++ b/tycho-bundles/org.eclipse.tycho.p2.tools.tests/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho-bundles</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>org.eclipse.tycho.p2.tools.tests</artifactId>
+diff --git a/tycho-bundles/org.eclipse.tycho.test.utils/META-INF/MANIFEST.MF b/tycho-bundles/org.eclipse.tycho.test.utils/META-INF/MANIFEST.MF
+index 80081a6..eb100b5 100644
+--- a/tycho-bundles/org.eclipse.tycho.test.utils/META-INF/MANIFEST.MF
++++ b/tycho-bundles/org.eclipse.tycho.test.utils/META-INF/MANIFEST.MF
+@@ -2,7 +2,7 @@ Manifest-Version: 1.0
+ Bundle-ManifestVersion: 2
+ Bundle-Name: Tycho Test Utilities (Incubation)
+ Bundle-SymbolicName: org.eclipse.tycho.test.utils
+-Bundle-Version: 0.19.0
++Bundle-Version: 0.19.0.qualifier
+ Bundle-RequiredExecutionEnvironment: J2SE-1.5
+ Require-Bundle: org.junit;bundle-version="[4.8.1,5.0.0)",
+  org.eclipse.equinox.p2.core;bundle-version="1.0.100",
+diff --git a/tycho-bundles/org.eclipse.tycho.test.utils/pom.xml b/tycho-bundles/org.eclipse.tycho.test.utils/pom.xml
+index c0f4490..89ea7bb 100644
+--- a/tycho-bundles/org.eclipse.tycho.test.utils/pom.xml
++++ b/tycho-bundles/org.eclipse.tycho.test.utils/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho-bundles</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>org.eclipse.tycho.test.utils</artifactId>
+diff --git a/tycho-bundles/pom.xml b/tycho-bundles/pom.xml
+index fefe156..d5ca6e4 100644
+--- a/tycho-bundles/pom.xml
++++ b/tycho-bundles/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>tycho-bundles</artifactId>
+diff --git a/tycho-bundles/tycho-bundles-external/pom.xml b/tycho-bundles/tycho-bundles-external/pom.xml
+index f3ba688..2463b17 100644
+--- a/tycho-bundles/tycho-bundles-external/pom.xml
++++ b/tycho-bundles/tycho-bundles-external/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho-bundles</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>tycho-bundles-external</artifactId>
+diff --git a/tycho-bundles/tycho-bundles-external/tycho-bundles-external.product b/tycho-bundles/tycho-bundles-external/tycho-bundles-external.product
+index d4cb907..f7e32c6 100644
+--- a/tycho-bundles/tycho-bundles-external/tycho-bundles-external.product
++++ b/tycho-bundles/tycho-bundles-external/tycho-bundles-external.product
+@@ -1,7 +1,7 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <?pde version="3.5"?>
+ 
+-<product name="org.eclipse.tycho.p2" uid="tycho-bundles-external" id="org.eclipse.equinox.p2.director.app.product" application="org.eclipse.equinox.p2.director.app.application" version="0.19.0" useFeatures="false" includeLaunchers="false">
++<product name="org.eclipse.tycho.p2" uid="tycho-bundles-external" id="org.eclipse.equinox.p2.director.app.product" application="org.eclipse.equinox.p2.director.app.application" version="0.19.0.qualifier" useFeatures="false" includeLaunchers="false">
+ 
+    <configIni use="default">
+    </configIni>
+diff --git a/tycho-bundles/tycho-bundles-target/pom.xml b/tycho-bundles/tycho-bundles-target/pom.xml
+index bec9f6d..8a957e5 100644
+--- a/tycho-bundles/tycho-bundles-target/pom.xml
++++ b/tycho-bundles/tycho-bundles-target/pom.xml
+@@ -5,7 +5,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho-bundles</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 		<relativePath>..</relativePath>
+ 	</parent>
+ 
+diff --git a/tycho-bundles/tycho-standalone-p2-director/pom.xml b/tycho-bundles/tycho-standalone-p2-director/pom.xml
+index 6df1530..833cee6 100644
+--- a/tycho-bundles/tycho-standalone-p2-director/pom.xml
++++ b/tycho-bundles/tycho-standalone-p2-director/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho-bundles</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>tycho-standalone-p2-director</artifactId>
+diff --git a/tycho-compiler-jdt/pom.xml b/tycho-compiler-jdt/pom.xml
+index 9d83c7c..b626b52 100644
+--- a/tycho-compiler-jdt/pom.xml
++++ b/tycho-compiler-jdt/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 	<artifactId>tycho-compiler-jdt</artifactId>
+ 
+diff --git a/tycho-compiler-plugin/pom.xml b/tycho-compiler-plugin/pom.xml
+index 3d00c67..d33a260 100644
+--- a/tycho-compiler-plugin/pom.xml
++++ b/tycho-compiler-plugin/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>tycho-compiler-plugin</artifactId>
+diff --git a/tycho-core/pom.xml b/tycho-core/pom.xml
+index b29017f..8cf6744 100644
+--- a/tycho-core/pom.xml
++++ b/tycho-core/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 	<artifactId>tycho-core</artifactId>
+ 
+diff --git a/tycho-embedder-api/pom.xml b/tycho-embedder-api/pom.xml
+index 12eb828..9a74c24 100644
+--- a/tycho-embedder-api/pom.xml
++++ b/tycho-embedder-api/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 	<artifactId>tycho-embedder-api</artifactId>
+ 
+diff --git a/tycho-its/pom.xml b/tycho-its/pom.xml
+index df9b69e..6e349e0 100644
+--- a/tycho-its/pom.xml
++++ b/tycho-its/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 	<artifactId>tycho-its</artifactId>
+ 
+diff --git a/tycho-maven-plugin/pom.xml b/tycho-maven-plugin/pom.xml
+index 3674f90..b45b3db 100644
+--- a/tycho-maven-plugin/pom.xml
++++ b/tycho-maven-plugin/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>tycho-maven-plugin</artifactId>
+diff --git a/tycho-metadata-model/pom.xml b/tycho-metadata-model/pom.xml
+index c95dee6..e60c15d 100644
+--- a/tycho-metadata-model/pom.xml
++++ b/tycho-metadata-model/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 	<artifactId>tycho-metadata-model</artifactId>
+ 
+diff --git a/tycho-p2/pom.xml b/tycho-p2/pom.xml
+index 9f329c0..51f7905 100644
+--- a/tycho-p2/pom.xml
++++ b/tycho-p2/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<artifactId>tycho</artifactId>
+ 		<groupId>org.eclipse.tycho</groupId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>tycho-p2</artifactId>
+diff --git a/tycho-p2/tycho-p2-director-plugin/pom.xml b/tycho-p2/tycho-p2-director-plugin/pom.xml
+index 71d3f38..70626df 100644
+--- a/tycho-p2/tycho-p2-director-plugin/pom.xml
++++ b/tycho-p2/tycho-p2-director-plugin/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho-p2</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>tycho-p2-director-plugin</artifactId>
+diff --git a/tycho-p2/tycho-p2-facade/pom.xml b/tycho-p2/tycho-p2-facade/pom.xml
+index 570340f..777c4c0 100644
+--- a/tycho-p2/tycho-p2-facade/pom.xml
++++ b/tycho-p2/tycho-p2-facade/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho-p2</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 	<artifactId>tycho-p2-facade</artifactId>
+ 
+diff --git a/tycho-p2/tycho-p2-plugin/pom.xml b/tycho-p2/tycho-p2-plugin/pom.xml
+index 02a37e1..71ac5b3 100644
+--- a/tycho-p2/tycho-p2-plugin/pom.xml
++++ b/tycho-p2/tycho-p2-plugin/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho-p2</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>tycho-p2-plugin</artifactId>
+diff --git a/tycho-p2/tycho-p2-publisher-plugin/pom.xml b/tycho-p2/tycho-p2-publisher-plugin/pom.xml
+index 4a75ef1..4fe0cab 100644
+--- a/tycho-p2/tycho-p2-publisher-plugin/pom.xml
++++ b/tycho-p2/tycho-p2-publisher-plugin/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho-p2</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>tycho-p2-publisher-plugin</artifactId>
+diff --git a/tycho-p2/tycho-p2-repository-plugin/pom.xml b/tycho-p2/tycho-p2-repository-plugin/pom.xml
+index 5ae54b7..39b610e 100644
+--- a/tycho-p2/tycho-p2-repository-plugin/pom.xml
++++ b/tycho-p2/tycho-p2-repository-plugin/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho-p2</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>tycho-p2-repository-plugin</artifactId>
+diff --git a/tycho-packaging-plugin/pom.xml b/tycho-packaging-plugin/pom.xml
+index 908fbf9..e613ba0 100644
+--- a/tycho-packaging-plugin/pom.xml
++++ b/tycho-packaging-plugin/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>tycho-packaging-plugin</artifactId>
+diff --git a/tycho-pomgenerator-plugin/pom.xml b/tycho-pomgenerator-plugin/pom.xml
+index ba0bf23..7ba82a2 100644
+--- a/tycho-pomgenerator-plugin/pom.xml
++++ b/tycho-pomgenerator-plugin/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>tycho-pomgenerator-plugin</artifactId>
+diff --git a/tycho-release/pom.xml b/tycho-release/pom.xml
+index e399894..f73764b 100644
+--- a/tycho-release/pom.xml
++++ b/tycho-release/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>tycho-release</artifactId>
+diff --git a/tycho-release/tycho-versions-plugin/pom.xml b/tycho-release/tycho-versions-plugin/pom.xml
+index a01a152..e53b9b8 100644
+--- a/tycho-release/tycho-versions-plugin/pom.xml
++++ b/tycho-release/tycho-versions-plugin/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho-release</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>tycho-versions-plugin</artifactId>
+diff --git a/tycho-source-plugin/pom.xml b/tycho-source-plugin/pom.xml
+index 752a253..85175c9 100644
+--- a/tycho-source-plugin/pom.xml
++++ b/tycho-source-plugin/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>tycho-source-plugin</artifactId>
+diff --git a/tycho-surefire/org.eclipse.tycho.surefire.junit/META-INF/MANIFEST.MF b/tycho-surefire/org.eclipse.tycho.surefire.junit/META-INF/MANIFEST.MF
+index 7a3e546..3ff2865 100644
+--- a/tycho-surefire/org.eclipse.tycho.surefire.junit/META-INF/MANIFEST.MF
++++ b/tycho-surefire/org.eclipse.tycho.surefire.junit/META-INF/MANIFEST.MF
+@@ -2,7 +2,7 @@ Manifest-Version: 1.0
+ Bundle-ManifestVersion: 2
+ Bundle-Name: Tycho Surefire OSGi JUnit3 Runner (Incubation)
+ Bundle-SymbolicName: org.eclipse.tycho.surefire.junit;singleton:=true
+-Bundle-Version: 0.19.0
++Bundle-Version: 0.19.0.qualifier
+ Fragment-Host: org.eclipse.tycho.surefire.osgibooter;bundle-version="0.14.0"
+ Bundle-RequiredExecutionEnvironment: J2SE-1.5,
+  JavaSE-1.6
+diff --git a/tycho-surefire/org.eclipse.tycho.surefire.junit/pom.xml b/tycho-surefire/org.eclipse.tycho.surefire.junit/pom.xml
+index f59b7a3..a80d4a5 100644
+--- a/tycho-surefire/org.eclipse.tycho.surefire.junit/pom.xml
++++ b/tycho-surefire/org.eclipse.tycho.surefire.junit/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho-surefire</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>org.eclipse.tycho.surefire.junit</artifactId>
+diff --git a/tycho-surefire/org.eclipse.tycho.surefire.junit4/META-INF/MANIFEST.MF b/tycho-surefire/org.eclipse.tycho.surefire.junit4/META-INF/MANIFEST.MF
+index 822552a..54643fc 100644
+--- a/tycho-surefire/org.eclipse.tycho.surefire.junit4/META-INF/MANIFEST.MF
++++ b/tycho-surefire/org.eclipse.tycho.surefire.junit4/META-INF/MANIFEST.MF
+@@ -2,7 +2,7 @@ Manifest-Version: 1.0
+ Bundle-ManifestVersion: 2
+ Bundle-Name: Tycho Surefire OSGi JUnit4 Runner (Incubation)
+ Bundle-SymbolicName: org.eclipse.tycho.surefire.junit4;singleton:=true
+-Bundle-Version: 0.19.0
++Bundle-Version: 0.19.0.qualifier
+ Fragment-Host: org.eclipse.tycho.surefire.osgibooter;bundle-version="0.14.0"
+ Bundle-RequiredExecutionEnvironment: J2SE-1.5,
+  JavaSE-1.6
+diff --git a/tycho-surefire/org.eclipse.tycho.surefire.junit4/pom.xml b/tycho-surefire/org.eclipse.tycho.surefire.junit4/pom.xml
+index c2dc5e0..f3aa641 100644
+--- a/tycho-surefire/org.eclipse.tycho.surefire.junit4/pom.xml
++++ b/tycho-surefire/org.eclipse.tycho.surefire.junit4/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho-surefire</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>org.eclipse.tycho.surefire.junit4</artifactId>
+diff --git a/tycho-surefire/org.eclipse.tycho.surefire.junit47/META-INF/MANIFEST.MF b/tycho-surefire/org.eclipse.tycho.surefire.junit47/META-INF/MANIFEST.MF
+index 6707137..7edd6e3 100644
+--- a/tycho-surefire/org.eclipse.tycho.surefire.junit47/META-INF/MANIFEST.MF
++++ b/tycho-surefire/org.eclipse.tycho.surefire.junit47/META-INF/MANIFEST.MF
+@@ -2,7 +2,7 @@ Manifest-Version: 1.0
+ Bundle-ManifestVersion: 2
+ Bundle-Name: Tycho Surefire OSGi JUnit4.7 Runner (Incubation)
+ Bundle-SymbolicName: org.eclipse.tycho.surefire.junit47;singleton:=true
+-Bundle-Version: 0.19.0
++Bundle-Version: 0.19.0.qualifier
+ Fragment-Host: org.eclipse.tycho.surefire.osgibooter;bundle-version="0.16.0"
+ Bundle-RequiredExecutionEnvironment: J2SE-1.5
+ Bundle-ClassPath: .,
+diff --git a/tycho-surefire/org.eclipse.tycho.surefire.junit47/pom.xml b/tycho-surefire/org.eclipse.tycho.surefire.junit47/pom.xml
+index 33174f3..49f8afc 100644
+--- a/tycho-surefire/org.eclipse.tycho.surefire.junit47/pom.xml
++++ b/tycho-surefire/org.eclipse.tycho.surefire.junit47/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho-surefire</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>org.eclipse.tycho.surefire.junit47</artifactId>
+diff --git a/tycho-surefire/org.eclipse.tycho.surefire.osgibooter/META-INF/MANIFEST.MF b/tycho-surefire/org.eclipse.tycho.surefire.osgibooter/META-INF/MANIFEST.MF
+index 25e3618..dfee356 100644
+--- a/tycho-surefire/org.eclipse.tycho.surefire.osgibooter/META-INF/MANIFEST.MF
++++ b/tycho-surefire/org.eclipse.tycho.surefire.osgibooter/META-INF/MANIFEST.MF
+@@ -8,7 +8,7 @@ Bundle-ClassPath: .,
+  jars/surefire-api-2.15.jar,
+  jars/maven-surefire-common-2.15.jar,
+  jars/plexus-utils-3.0.jar
+-Bundle-Version: 0.19.0
++Bundle-Version: 0.19.0.qualifier
+ Bundle-Name: Tycho Surefire OSGi Booter Eclipse Application (Incubation)
+ Bundle-ManifestVersion: 2
+ Bundle-SymbolicName: org.eclipse.tycho.surefire.osgibooter;singleton:=true
+diff --git a/tycho-surefire/org.eclipse.tycho.surefire.osgibooter/pom.xml b/tycho-surefire/org.eclipse.tycho.surefire.osgibooter/pom.xml
+index 815cdee..52be2ca 100644
+--- a/tycho-surefire/org.eclipse.tycho.surefire.osgibooter/pom.xml
++++ b/tycho-surefire/org.eclipse.tycho.surefire.osgibooter/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho-surefire</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>org.eclipse.tycho.surefire.osgibooter</artifactId>
+diff --git a/tycho-surefire/pom.xml b/tycho-surefire/pom.xml
+index 843fdd4..9a07192 100644
+--- a/tycho-surefire/pom.xml
++++ b/tycho-surefire/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>tycho-surefire</artifactId>
+diff --git a/tycho-surefire/tycho-surefire-plugin/pom.xml b/tycho-surefire/tycho-surefire-plugin/pom.xml
+index dad6835..c0b7a28 100644
+--- a/tycho-surefire/tycho-surefire-plugin/pom.xml
++++ b/tycho-surefire/tycho-surefire-plugin/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<groupId>org.eclipse.tycho</groupId>
+ 		<artifactId>tycho-surefire</artifactId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 
+ 	<artifactId>tycho-surefire-plugin</artifactId>
+diff --git a/tycho-testing-harness/pom.xml b/tycho-testing-harness/pom.xml
+index 69dff70..f44355c 100644
+--- a/tycho-testing-harness/pom.xml
++++ b/tycho-testing-harness/pom.xml
+@@ -17,7 +17,7 @@
+ 	<parent>
+ 		<artifactId>tycho</artifactId>
+ 		<groupId>org.eclipse.tycho</groupId>
+-		<version>0.19.0</version>
++		<version>0.19.0-SNAPSHOT</version>
+ 	</parent>
+ 	<artifactId>tycho-testing-harness</artifactId>
+ 

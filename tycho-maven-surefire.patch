@@ -1,0 +1,426 @@
+From 6885825adb193f8d69889a0f13de8b15506753ab Mon Sep 17 00:00:00 2001
+From: Jan Sievers <jan.sievers@sap.com>
+Date: Tue, 4 Sep 2012 16:02:52 +0200
+Subject: [PATCH] POC 386481 update maven surefire to latest version 2.15
+
+while SUREFIRE-825 and SUREFIRE-876 are fixed,
+there are several new problems:
+
+1. The junit47 provider is broken again (probably
+   due to junit bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=318299
+2. the internal structure of surefire chnaged significantly
+   (new jars need to be pulled into OSGi, the Surefire
+   booter/starter API changed, directory scanning must now
+   be done in the TestMojo already
+3. The most sever issue here is that we don't have the dependencies
+   of surefire under control and what used to be more or less self-contained
+   (surefire-api and surefire-booter) now drags in lots of dependencies
+   which we don't really want to wrap in OSGi. I only added those actually
+   needed by what we are using, the correct list of dependent jars would
+   be much longer.
+
+Change-Id: Ibcb439a24add880c4cdafe67b42e29ca3cb14ff1
+---
+ .../META-INF/MANIFEST.MF                           |  2 +-
+ .../build.properties                               |  2 +-
+ .../META-INF/MANIFEST.MF                           |  2 +-
+ .../build.properties                               |  2 +-
+ .../META-INF/MANIFEST.MF                           |  7 +++--
+ .../build.properties                               |  3 +-
+ .../org.eclipse.tycho.surefire.junit47/pom.xml     | 10 ++++++
+ .../META-INF/MANIFEST.MF                           |  6 ++--
+ .../org.eclipse.tycho.surefire.osgibooter/pom.xml  | 10 ++++++
+ .../surefire/osgibooter/OsgiSurefireBooter.java    | 36 ++++++++++++++--------
+ .../osgibooter/TychoClasspathConfiguration.java    | 35 +++++++++++++++------
+ tycho-surefire/pom.xml                             |  2 +-
+ tycho-surefire/tycho-surefire-plugin/pom.xml       |  5 +++
+ .../java/org/eclipse/tycho/surefire/TestMojo.java  | 29 +++++++++++++++--
+ .../surefire/provider/impl/JUnit47Provider.java    |  2 +-
+ 15 files changed, 116 insertions(+), 37 deletions(-)
+
+diff --git a/tycho-surefire/org.eclipse.tycho.surefire.junit/META-INF/MANIFEST.MF b/tycho-surefire/org.eclipse.tycho.surefire.junit/META-INF/MANIFEST.MF
+index 788207e..41d90f8 100644
+--- a/tycho-surefire/org.eclipse.tycho.surefire.junit/META-INF/MANIFEST.MF
++++ b/tycho-surefire/org.eclipse.tycho.surefire.junit/META-INF/MANIFEST.MF
+@@ -7,5 +7,5 @@ Fragment-Host: org.eclipse.tycho.surefire.osgibooter;bundle-version="0.14.0"
+ Bundle-RequiredExecutionEnvironment: J2SE-1.5,
+  JavaSE-1.6
+ Require-Bundle: org.junit;bundle-version="[3.8.0,4.0.0)"
+-Bundle-ClassPath: jars/surefire-junit3-2.10.jar
++Bundle-ClassPath: jars/surefire-junit3-2.15.jar
+ Bundle-Vendor: %providerName
+diff --git a/tycho-surefire/org.eclipse.tycho.surefire.junit/build.properties b/tycho-surefire/org.eclipse.tycho.surefire.junit/build.properties
+index 499ce76..fe88b19 100644
+--- a/tycho-surefire/org.eclipse.tycho.surefire.junit/build.properties
++++ b/tycho-surefire/org.eclipse.tycho.surefire.junit/build.properties
+@@ -9,5 +9,5 @@
+ #    Sonatype Inc. - initial API and implementation
+ ###############################################################################
+ bin.includes = META-INF/,\
+-               jars/surefire-junit3-2.10.jar,\
++               jars/,\
+                plugin.properties
+diff --git a/tycho-surefire/org.eclipse.tycho.surefire.junit4/META-INF/MANIFEST.MF b/tycho-surefire/org.eclipse.tycho.surefire.junit4/META-INF/MANIFEST.MF
+index fefa9e8..b815348 100644
+--- a/tycho-surefire/org.eclipse.tycho.surefire.junit4/META-INF/MANIFEST.MF
++++ b/tycho-surefire/org.eclipse.tycho.surefire.junit4/META-INF/MANIFEST.MF
+@@ -6,7 +6,7 @@ Bundle-Version: 0.19.0
+ Fragment-Host: org.eclipse.tycho.surefire.osgibooter;bundle-version="0.14.0"
+ Bundle-RequiredExecutionEnvironment: J2SE-1.5,
+  JavaSE-1.6
+-Bundle-ClassPath: jars/surefire-junit4-2.10.jar
++Bundle-ClassPath: jars/surefire-junit4-2.15.jar
+ Import-Package: junit.framework;version="3.0.0",
+  org.junit;version="4.0.0",
+  org.junit.runner;version="4.0.0",
+diff --git a/tycho-surefire/org.eclipse.tycho.surefire.junit4/build.properties b/tycho-surefire/org.eclipse.tycho.surefire.junit4/build.properties
+index b787149..fe88b19 100644
+--- a/tycho-surefire/org.eclipse.tycho.surefire.junit4/build.properties
++++ b/tycho-surefire/org.eclipse.tycho.surefire.junit4/build.properties
+@@ -9,5 +9,5 @@
+ #    Sonatype Inc. - initial API and implementation
+ ###############################################################################
+ bin.includes = META-INF/,\
+-               jars/surefire-junit4-2.10.jar,\
++               jars/,\
+                plugin.properties
+diff --git a/tycho-surefire/org.eclipse.tycho.surefire.junit47/META-INF/MANIFEST.MF b/tycho-surefire/org.eclipse.tycho.surefire.junit47/META-INF/MANIFEST.MF
+index 1fd1ea3..978a955 100644
+--- a/tycho-surefire/org.eclipse.tycho.surefire.junit47/META-INF/MANIFEST.MF
++++ b/tycho-surefire/org.eclipse.tycho.surefire.junit47/META-INF/MANIFEST.MF
+@@ -6,11 +6,14 @@ Bundle-Version: 0.19.0
+ Fragment-Host: org.eclipse.tycho.surefire.osgibooter;bundle-version="0.16.0"
+ Bundle-RequiredExecutionEnvironment: J2SE-1.5
+ Bundle-ClassPath: .,
+- jars/surefire-junit47-2.10.jar
++ jars/surefire-junit47-2.15.jar,
++ jars/common-junit48-2.15.jar,
++ jars/surefire-grouper-2.15.jar
+ Import-Package: junit.framework;version="3.0.0",
+  org.junit;version="[4.7,5)",
+  org.junit.runner;version="[4.7,5)",
+  org.junit.runner.notification;version="[4.7,5)",
+  org.junit.runners;version="[4.7,5)",
+- org.junit.runners.model;version="[4.7,5)"
++ org.junit.runners.model;version="[4.7,5)",
++ org.junit.runner.manipulation;version="[4.7,5)"
+ Bundle-Vendor: %providerName
+diff --git a/tycho-surefire/org.eclipse.tycho.surefire.junit47/build.properties b/tycho-surefire/org.eclipse.tycho.surefire.junit47/build.properties
+index 716961d..2589258 100644
+--- a/tycho-surefire/org.eclipse.tycho.surefire.junit47/build.properties
++++ b/tycho-surefire/org.eclipse.tycho.surefire.junit47/build.properties
+@@ -10,8 +10,7 @@
+ ###############################################################################
+ bin.includes = .,\
+                META-INF/,\
+-               jars/surefire-junit47-2.10.jar,\
++               jars/,\
+                plugin.properties,\
+                about.html,\
+                about_files/
+-source.. = src/
+diff --git a/tycho-surefire/org.eclipse.tycho.surefire.junit47/pom.xml b/tycho-surefire/org.eclipse.tycho.surefire.junit47/pom.xml
+index 7d08daf..442f830 100644
+--- a/tycho-surefire/org.eclipse.tycho.surefire.junit47/pom.xml
++++ b/tycho-surefire/org.eclipse.tycho.surefire.junit47/pom.xml
+@@ -44,6 +44,16 @@
+ 									<artifactId>surefire-junit47</artifactId>
+ 									<version>${surefire-version}</version>
+ 								</artifactItem>
++								<artifactItem>
++									<groupId>org.apache.maven.surefire</groupId>
++									<artifactId>common-junit48</artifactId>
++									<version>${surefire-version}</version>
++								</artifactItem>
++								<artifactItem>
++									<groupId>org.apache.maven.surefire</groupId>
++									<artifactId>surefire-grouper</artifactId>
++									<version>${surefire-version}</version>
++								</artifactItem>
+ 							</artifactItems>
+ 						</configuration>
+ 					</execution>
+diff --git a/tycho-surefire/org.eclipse.tycho.surefire.osgibooter/META-INF/MANIFEST.MF b/tycho-surefire/org.eclipse.tycho.surefire.osgibooter/META-INF/MANIFEST.MF
+index 09cf7bc..25e3618 100644
+--- a/tycho-surefire/org.eclipse.tycho.surefire.osgibooter/META-INF/MANIFEST.MF
++++ b/tycho-surefire/org.eclipse.tycho.surefire.osgibooter/META-INF/MANIFEST.MF
+@@ -4,8 +4,10 @@ Require-Bundle: org.eclipse.osgi;bundle-version="3.2.2",
+  org.eclipse.core.runtime;bundle-version="3.2.0"
+ Eclipse-AutoStart: true
+ Bundle-ClassPath: .,
+- jars/surefire-booter-2.10.jar,
+- jars/surefire-api-2.10.jar
++ jars/surefire-booter-2.15.jar,
++ jars/surefire-api-2.15.jar,
++ jars/maven-surefire-common-2.15.jar,
++ jars/plexus-utils-3.0.jar
+ Bundle-Version: 0.19.0
+ Bundle-Name: Tycho Surefire OSGi Booter Eclipse Application (Incubation)
+ Bundle-ManifestVersion: 2
+diff --git a/tycho-surefire/org.eclipse.tycho.surefire.osgibooter/pom.xml b/tycho-surefire/org.eclipse.tycho.surefire.osgibooter/pom.xml
+index 6546f70..815cdee 100644
+--- a/tycho-surefire/org.eclipse.tycho.surefire.osgibooter/pom.xml
++++ b/tycho-surefire/org.eclipse.tycho.surefire.osgibooter/pom.xml
+@@ -52,6 +52,16 @@
+ 									<artifactId>surefire-booter</artifactId>
+ 									<version>${surefire-version}</version>
+ 								</artifactItem>
++								<artifactItem>
++									<groupId>org.apache.maven.surefire</groupId>
++									<artifactId>maven-surefire-common</artifactId>
++									<version>${surefire-version}</version>
++								</artifactItem>
++								<artifactItem>
++									<groupId>org.codehaus.plexus</groupId>
++									<artifactId>plexus-utils</artifactId>
++									<version>3.0</version>
++								</artifactItem>
+ 							</artifactItems>
+ 						</configuration>
+ 					</execution>
+diff --git a/tycho-surefire/org.eclipse.tycho.surefire.osgibooter/src/main/java/org/eclipse/tycho/surefire/osgibooter/OsgiSurefireBooter.java b/tycho-surefire/org.eclipse.tycho.surefire.osgibooter/src/main/java/org/eclipse/tycho/surefire/osgibooter/OsgiSurefireBooter.java
+index 56b2264..1ac5599 100644
+--- a/tycho-surefire/org.eclipse.tycho.surefire.osgibooter/src/main/java/org/eclipse/tycho/surefire/osgibooter/OsgiSurefireBooter.java
++++ b/tycho-surefire/org.eclipse.tycho.surefire.osgibooter/src/main/java/org/eclipse/tycho/surefire/osgibooter/OsgiSurefireBooter.java
+@@ -18,20 +18,25 @@ import java.io.IOException;
+ import java.net.URL;
+ import java.util.ArrayList;
+ import java.util.Arrays;
++import java.util.Collections;
+ import java.util.Enumeration;
+ import java.util.List;
+ import java.util.Map;
+ import java.util.Properties;
+ import java.util.Set;
+ 
++import org.apache.maven.plugin.surefire.StartupReportConfiguration;
++import org.apache.maven.plugin.surefire.report.DefaultReporterFactory;
+ import org.apache.maven.surefire.booter.ClassLoaderConfiguration;
++import org.apache.maven.surefire.booter.ForkedBooter;
+ import org.apache.maven.surefire.booter.ProviderConfiguration;
++import org.apache.maven.surefire.booter.ProviderFactory;
+ import org.apache.maven.surefire.booter.StartupConfiguration;
+-import org.apache.maven.surefire.booter.StartupReportConfiguration;
+-import org.apache.maven.surefire.booter.SurefireStarter;
+ import org.apache.maven.surefire.report.ReporterConfiguration;
++import org.apache.maven.surefire.report.ReporterFactory;
+ import org.apache.maven.surefire.suite.RunResult;
+ import org.apache.maven.surefire.testset.DirectoryScannerParameters;
++import org.apache.maven.surefire.testset.RunOrderParameters;
+ import org.apache.maven.surefire.testset.TestRequest;
+ import org.apache.maven.surefire.util.RunOrder;
+ import org.eclipse.core.runtime.CoreException;
+@@ -56,7 +61,7 @@ public class OsgiSurefireBooter {
+         List<String> includes = getIncludesExcludes(testProps.getProperty("includes"));
+         List<String> excludes = getIncludesExcludes(testProps.getProperty("excludes"));
+ 
+-        String forkMode = "never";
++        boolean forkRequested = true;
+         boolean inForkedVM = true;
+         boolean trimStacktrace = true;
+         boolean useSystemClassloader = false;
+@@ -65,26 +70,31 @@ public class OsgiSurefireBooter {
+         boolean printSummary = true;
+         boolean disableXmlReport = false;
+         ClassLoader testClassLoader = getBundleClassLoader(plugin);
+-        ClassLoader surefireClassLoader = SurefireStarter.class.getClassLoader();
++        ClassLoader surefireClassLoader = ForkedBooter.class.getClassLoader();
+ 
+         TychoClasspathConfiguration classPathConfig = new TychoClasspathConfiguration(testClassLoader,
+                 surefireClassLoader);
+         StartupConfiguration startupConfiguration = new StartupConfiguration(provider, classPathConfig,
+-                new ClassLoaderConfiguration(useSystemClassloader, useManifestOnlyJar), forkMode, inForkedVM);
++                new ClassLoaderConfiguration(useSystemClassloader, useManifestOnlyJar), forkRequested, inForkedVM);
+         DirectoryScannerParameters dirScannerParams = new DirectoryScannerParameters(testClassesDir, includes,
+-                excludes, failIfNoTests, RunOrder.valueOf(runOrder));
++                excludes, Collections.emptyList(), failIfNoTests, RunOrder.valueOf(runOrder).toString());
+         ReporterConfiguration reporterConfig = new ReporterConfiguration(reportsDir, trimStacktrace);
+         TestRequest testRequest = new TestRequest(null, testClassesDir, null);
+-        ProviderConfiguration providerConfiguration = new ProviderConfiguration(dirScannerParams, failIfNoTests,
+-                reporterConfig, null, testRequest, extractProviderProperties(testProps), null);
++        ProviderConfiguration providerConfiguration = new ProviderConfiguration(dirScannerParams,
++                new RunOrderParameters((String) null, null), failIfNoTests, reporterConfig, null, testRequest,
++                extractProviderProperties(testProps), null, false);
+         StartupReportConfiguration startupReportConfig = new StartupReportConfiguration(useFile, printSummary,
+                 StartupReportConfiguration.PLAIN_REPORT_FORMAT, redirectTestOutputToFile, disableXmlReport, reportsDir,
+-                trimStacktrace);
+-        SurefireStarter surefireStarter = new SurefireStarter(startupConfiguration, providerConfiguration,
+-                startupReportConfig);
++                trimStacktrace, null, "TESTHASH", false);
+ 
+-        RunResult result = surefireStarter.runSuitesInProcess();
+-        return result.getForkedProcessCode();
++        RunResult result = ProviderFactory.invokeProvider(null, classPathConfig.createMergedClassLoader(),
++                createReporterFactory(startupReportConfig), providerConfiguration, false, startupConfiguration, true);
++
++        return result.getFailsafeCode() == null ? 0 : result.getFailsafeCode();
++    }
++
++    private static ReporterFactory createReporterFactory(StartupReportConfiguration startupReportConfig) {
++        return new DefaultReporterFactory(startupReportConfig);
+     }
+ 
+     /*
+diff --git a/tycho-surefire/org.eclipse.tycho.surefire.osgibooter/src/main/java/org/eclipse/tycho/surefire/osgibooter/TychoClasspathConfiguration.java b/tycho-surefire/org.eclipse.tycho.surefire.osgibooter/src/main/java/org/eclipse/tycho/surefire/osgibooter/TychoClasspathConfiguration.java
+index c94d3ea..fc606b0 100644
+--- a/tycho-surefire/org.eclipse.tycho.surefire.osgibooter/src/main/java/org/eclipse/tycho/surefire/osgibooter/TychoClasspathConfiguration.java
++++ b/tycho-surefire/org.eclipse.tycho.surefire.osgibooter/src/main/java/org/eclipse/tycho/surefire/osgibooter/TychoClasspathConfiguration.java
+@@ -25,18 +25,35 @@ public class TychoClasspathConfiguration extends ClasspathConfiguration {
+     }
+ 
+     @Override
+-    public ClassLoader createSurefireClassLoader(ClassLoader parent) throws SurefireExecutionException {
+-        return surefireClassLoader;
++    public ClassLoader createMergedClassLoader() throws SurefireExecutionException {
++        return new MergedClassLoader(null, new ClassLoader[] { testClassLoader, surefireClassLoader });
+     }
+ 
+-    @Override
+-    public ClassLoader createTestClassLoader() throws SurefireExecutionException {
+-        return testClassLoader;
+-    }
++    private class MergedClassLoader extends ClassLoader {
++
++        private ClassLoader[] delegateClassLoaders;
++
++        public MergedClassLoader(ClassLoader parent, ClassLoader[] delegateClassLoaders) {
++            super(parent);
++            this.delegateClassLoaders = delegateClassLoaders;
++        }
++
++        @Override
++        public Class<?> loadClass(String name) throws ClassNotFoundException {
++            return findClass(name);
++        }
++
++        @Override
++        protected Class<?> findClass(String name) throws ClassNotFoundException {
++            for (ClassLoader delegate : delegateClassLoaders) {
++                try {
++                    return delegate.loadClass(name);
++                } catch (ClassNotFoundException e) {
++                }
++            }
++            throw new ClassNotFoundException();
++        }
+ 
+-    @Override
+-    public ClassLoader createTestClassLoader(boolean childDelegation) throws SurefireExecutionException {
+-        return testClassLoader;
+     }
+ 
+ }
+diff --git a/tycho-surefire/pom.xml b/tycho-surefire/pom.xml
+index 811dff0..843fdd4 100644
+--- a/tycho-surefire/pom.xml
++++ b/tycho-surefire/pom.xml
+@@ -26,7 +26,7 @@
+ 	<name>Tycho Surefire Parent (Incubation)</name>
+ 
+ 	<properties>
+-		<surefire-version>2.10</surefire-version>
++		<surefire-version>2.15</surefire-version>
+ 	</properties>
+ 
+ 	<modules>
+diff --git a/tycho-surefire/tycho-surefire-plugin/pom.xml b/tycho-surefire/tycho-surefire-plugin/pom.xml
+index b6aa41b..dad6835 100644
+--- a/tycho-surefire/tycho-surefire-plugin/pom.xml
++++ b/tycho-surefire/tycho-surefire-plugin/pom.xml
+@@ -101,5 +101,10 @@
+ 			<artifactId>tycho-p2-facade</artifactId>
+ 			<version>${project.version}</version>
+ 		</dependency>
++		<dependency>
++			<groupId>org.apache.maven.surefire</groupId>
++			<artifactId>maven-surefire-common</artifactId>
++			<version>${surefire-version}</version>
++		</dependency>
+ 	</dependencies>
+ </project>
+diff --git a/tycho-surefire/tycho-surefire-plugin/src/main/java/org/eclipse/tycho/surefire/TestMojo.java b/tycho-surefire/tycho-surefire-plugin/src/main/java/org/eclipse/tycho/surefire/TestMojo.java
+index ce598f5..ccdf0b2 100644
+--- a/tycho-surefire/tycho-surefire-plugin/src/main/java/org/eclipse/tycho/surefire/TestMojo.java
++++ b/tycho-surefire/tycho-surefire-plugin/src/main/java/org/eclipse/tycho/surefire/TestMojo.java
+@@ -20,6 +20,7 @@ import java.net.MalformedURLException;
+ import java.util.ArrayList;
+ import java.util.Arrays;
+ import java.util.HashMap;
++import java.util.Collections;
+ import java.util.List;
+ import java.util.Map;
+ import java.util.Properties;
+@@ -35,9 +36,10 @@ import org.apache.maven.model.Dependency;
+ import org.apache.maven.plugin.AbstractMojo;
+ import org.apache.maven.plugin.MojoExecutionException;
+ import org.apache.maven.plugin.MojoFailureException;
++import org.apache.maven.plugin.surefire.util.DirectoryScanner;
+ import org.apache.maven.project.MavenProject;
+ import org.apache.maven.repository.RepositorySystem;
+-import org.apache.maven.surefire.suite.RunResult;
++import org.apache.maven.surefire.util.DefaultScanResult;
+ import org.apache.maven.toolchain.Toolchain;
+ import org.apache.maven.toolchain.ToolchainManager;
+ import org.codehaus.plexus.util.FileUtils;
+@@ -905,6 +907,27 @@ public class TestMojo extends AbstractMojo {
+             result.put("perCoreThreadCount", String.valueOf(perCoreThreadCount));
+             result.put("useUnlimitedThreads", String.valueOf(useUnlimitedThreads));
+         }
++
++        List<String> defaultIncludes = Arrays.asList("**/Test*.class", "**/*Test.class", "**/*TestCase.class");
++        List<String> defaultExcludes = Arrays.asList("**/Abstract*Test.class", "**/Abstract*TestCase.class", "**/*$*");
++        List<String> includeList;
++        if (test != null) {
++            String test = this.test;
++            test = test.replace('.', '/');
++            test = test.endsWith(".class") ? test : test + ".class";
++            test = test.startsWith("**/") ? test : "**/" + test;
++            includeList = Collections.singletonList(test);
++        } else if (testClass != null) {
++            includeList = Collections.singletonList(testClass.replace('.', '/') + ".class");
++        } else if (includes != null) {
++            includeList = includes;
++        } else {
++            includeList = defaultIncludes;
++        }
++        DirectoryScanner scanner = new DirectoryScanner(testClassesDirectory, includeList, excludes != null ? excludes
++                : defaultExcludes, Collections.<String> emptyList());
++        DefaultScanResult scanResult = scanner.scan();
++        scanResult.writeTo(result);
+         return result;
+     }
+ 
+@@ -949,7 +972,7 @@ public class TestMojo extends AbstractMojo {
+         case 0:
+             getLog().info("All tests passed!");
+             break;
+-        case RunResult.NO_TESTS:
++        case 254/* RunResult.NO_TESTS */:
+             String message = "No tests found.";
+             if (failIfNoTests) {
+                 throw new MojoFailureException(message);
+@@ -957,7 +980,7 @@ public class TestMojo extends AbstractMojo {
+                 getLog().warn(message);
+             }
+             break;
+-        case RunResult.FAILURE:
++        case 255/* RunResult.FAILURE */:
+             String errorMessage = "There are test failures.\n\nPlease refer to " + reportsDirectory
+                     + " for the individual test results.";
+             if (testFailureIgnore) {
+diff --git a/tycho-surefire/tycho-surefire-plugin/src/main/java/org/eclipse/tycho/surefire/provider/impl/JUnit47Provider.java b/tycho-surefire/tycho-surefire-plugin/src/main/java/org/eclipse/tycho/surefire/provider/impl/JUnit47Provider.java
+index edcc46a..5d62d3d 100644
+--- a/tycho-surefire/tycho-surefire-plugin/src/main/java/org/eclipse/tycho/surefire/provider/impl/JUnit47Provider.java
++++ b/tycho-surefire/tycho-surefire-plugin/src/main/java/org/eclipse/tycho/surefire/provider/impl/JUnit47Provider.java
+@@ -44,7 +44,7 @@ public class JUnit47Provider extends AbstractJUnitProvider {
+     }
+ 
+     public String getSurefireProviderClassName() {
+-        return "org.apache.maven.surefire.junitcore.OsgiEnabledJUnitCoreProvider";
++        return "org.apache.maven.surefire.junitcore.JUnitCoreProvider";
+     }
+ 
+     public Version getVersion() {
+-- 
+1.8.3.1
+

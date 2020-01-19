@@ -1,0 +1,130 @@
+From 1b1fb76c03a437033f69b12834a069d5684d0ac0 Mon Sep 17 00:00:00 2001
+From: Roland Grunberg <rgrunber@redhat.com>
+Date: Fri, 21 Sep 2012 10:58:09 -0400
+Subject: [PATCH] Resolve all necessary dependencies for Tycho Surefire.
+
+When running an Eclipse bundle's tests, Tycho Surefire resolves its
+runtime dependencies using a class loader, which is in fact just looking
+through Bundle-ClassPath. As a result, it must copy over and include
+system jars in its Bundle-ClassPath. We use Fedora system jars to
+satisfy these dependencies but even these jars differ slightly in terms
+of provided classes. This patch addresses this issue.
+
+Basically, the jars added to the Bundle-ClassPath in this patch, provide
+the additional classes that are in the original jars used upstream.
+
+Change-Id: I9ef0239eed887fa47c380efcdce968934c788c9f
+---
+ .../org.eclipse.tycho.surefire.junit/META-INF/MANIFEST.MF      |  5 +++--
+ tycho-surefire/org.eclipse.tycho.surefire.junit/pom.xml        |  5 +++++
+ .../org.eclipse.tycho.surefire.junit4/META-INF/MANIFEST.MF     |  4 +++-
+ tycho-surefire/org.eclipse.tycho.surefire.junit4/pom.xml       | 10 ++++++++++
+ .../org.eclipse.tycho.surefire.junit47/META-INF/MANIFEST.MF    |  4 +++-
+ tycho-surefire/org.eclipse.tycho.surefire.junit47/pom.xml      | 10 ++++++++++
+ 6 files changed, 34 insertions(+), 4 deletions(-)
+
+diff --git a/tycho-surefire/org.eclipse.tycho.surefire.junit/META-INF/MANIFEST.MF b/tycho-surefire/org.eclipse.tycho.surefire.junit/META-INF/MANIFEST.MF
+index 41d90f8..7a3e546 100644
+--- a/tycho-surefire/org.eclipse.tycho.surefire.junit/META-INF/MANIFEST.MF
++++ b/tycho-surefire/org.eclipse.tycho.surefire.junit/META-INF/MANIFEST.MF
+@@ -6,6 +6,7 @@ Bundle-Version: 0.19.0
+ Fragment-Host: org.eclipse.tycho.surefire.osgibooter;bundle-version="0.14.0"
+ Bundle-RequiredExecutionEnvironment: J2SE-1.5,
+  JavaSE-1.6
+-Require-Bundle: org.junit;bundle-version="[3.8.0,4.0.0)"
+-Bundle-ClassPath: jars/surefire-junit3-2.15.jar
++Require-Bundle: org.junit;bundle-version="[3.8.0,5.0.0)"
++Bundle-ClassPath: jars/surefire-junit3-2.15.jar,
++ jars/common-junit3-2.15.jar
+ Bundle-Vendor: %providerName
+diff --git a/tycho-surefire/org.eclipse.tycho.surefire.junit/pom.xml b/tycho-surefire/org.eclipse.tycho.surefire.junit/pom.xml
+index 4022f00..f59b7a3 100644
+--- a/tycho-surefire/org.eclipse.tycho.surefire.junit/pom.xml
++++ b/tycho-surefire/org.eclipse.tycho.surefire.junit/pom.xml
+@@ -44,6 +44,11 @@
+ 									<artifactId>surefire-junit3</artifactId>
+ 									<version>${surefire-version}</version>
+ 								</artifactItem>
++								<artifactItem>
++									<groupId>org.apache.maven.surefire</groupId>
++									<artifactId>common-junit3</artifactId>
++									<version>${surefire-version}</version>
++								</artifactItem>
+ 							</artifactItems>
+ 						</configuration>
+ 					</execution>
+diff --git a/tycho-surefire/org.eclipse.tycho.surefire.junit4/META-INF/MANIFEST.MF b/tycho-surefire/org.eclipse.tycho.surefire.junit4/META-INF/MANIFEST.MF
+index b815348..822552a 100644
+--- a/tycho-surefire/org.eclipse.tycho.surefire.junit4/META-INF/MANIFEST.MF
++++ b/tycho-surefire/org.eclipse.tycho.surefire.junit4/META-INF/MANIFEST.MF
+@@ -6,7 +6,9 @@ Bundle-Version: 0.19.0
+ Fragment-Host: org.eclipse.tycho.surefire.osgibooter;bundle-version="0.14.0"
+ Bundle-RequiredExecutionEnvironment: J2SE-1.5,
+  JavaSE-1.6
+-Bundle-ClassPath: jars/surefire-junit4-2.15.jar
++Bundle-ClassPath: jars/surefire-junit4-2.15.jar,
++ jars/common-junit3-2.15.jar,
++ jars/common-junit4-2.15.jar
+ Import-Package: junit.framework;version="3.0.0",
+  org.junit;version="4.0.0",
+  org.junit.runner;version="4.0.0",
+diff --git a/tycho-surefire/org.eclipse.tycho.surefire.junit4/pom.xml b/tycho-surefire/org.eclipse.tycho.surefire.junit4/pom.xml
+index 11a34d6..c2dc5e0 100644
+--- a/tycho-surefire/org.eclipse.tycho.surefire.junit4/pom.xml
++++ b/tycho-surefire/org.eclipse.tycho.surefire.junit4/pom.xml
+@@ -44,6 +44,16 @@
+ 									<artifactId>surefire-junit4</artifactId>
+ 									<version>${surefire-version}</version>
+ 								</artifactItem>
++								<artifactItem>
++									<groupId>org.apache.maven.surefire</groupId>
++									<artifactId>common-junit3</artifactId>
++									<version>${surefire-version}</version>
++									</artifactItem>
++								<artifactItem>
++									<groupId>org.apache.maven.surefire</groupId>
++									<artifactId>common-junit4</artifactId>
++									<version>${surefire-version}</version>
++								</artifactItem>
+ 							</artifactItems>
+ 						</configuration>
+ 					</execution>
+diff --git a/tycho-surefire/org.eclipse.tycho.surefire.junit47/META-INF/MANIFEST.MF b/tycho-surefire/org.eclipse.tycho.surefire.junit47/META-INF/MANIFEST.MF
+index 978a955..6707137 100644
+--- a/tycho-surefire/org.eclipse.tycho.surefire.junit47/META-INF/MANIFEST.MF
++++ b/tycho-surefire/org.eclipse.tycho.surefire.junit47/META-INF/MANIFEST.MF
+@@ -8,7 +8,9 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
+ Bundle-ClassPath: .,
+  jars/surefire-junit47-2.15.jar,
+  jars/common-junit48-2.15.jar,
+- jars/surefire-grouper-2.15.jar
++ jars/surefire-grouper-2.15.jar,
++ jars/common-junit3-2.15.jar,
++ jars/common-junit4-2.15.jar
+ Import-Package: junit.framework;version="3.0.0",
+  org.junit;version="[4.7,5)",
+  org.junit.runner;version="[4.7,5)",
+diff --git a/tycho-surefire/org.eclipse.tycho.surefire.junit47/pom.xml b/tycho-surefire/org.eclipse.tycho.surefire.junit47/pom.xml
+index 442f830..33174f3 100644
+--- a/tycho-surefire/org.eclipse.tycho.surefire.junit47/pom.xml
++++ b/tycho-surefire/org.eclipse.tycho.surefire.junit47/pom.xml
+@@ -54,6 +54,16 @@
+ 									<artifactId>surefire-grouper</artifactId>
+ 									<version>${surefire-version}</version>
+ 								</artifactItem>
++								<artifactItem>
++									<groupId>org.apache.maven.surefire</groupId>
++									<artifactId>common-junit4</artifactId>
++									<version>${surefire-version}</version>
++								</artifactItem>
++								<artifactItem>
++									<groupId>org.apache.maven.surefire</groupId>
++									<artifactId>common-junit3</artifactId>
++									<version>${surefire-version}</version>
++								</artifactItem>
+ 							</artifactItems>
+ 						</configuration>
+ 					</execution>
+-- 
+1.8.3.1
+

@@ -1,0 +1,149 @@
+From 446e73cd3c2ef5ed8d5dc57615d88ef36445bafa Mon Sep 17 00:00:00 2001
+From: Roland Grunberg <rgrunber@redhat.com>
+Date: Mon, 19 Nov 2012 10:33:43 -0500
+Subject: [PATCH] Minor fixes of limited scope to get a Tycho bootstrapped
+ build.
+
+Eclipse p2 repositories can change subtly (disappear, become composites)
+causing bizare failures in resolving from the reactor cache so we must
+keep the URLs up to date.
+
+When doing a bootstrap build, we're using upstream jars with class files
+compiled as 'jsr14' (Allows running on 1.4 JDK and can compile against
+1.5 sources). JDK 1.7 is not backwards compatible (eg. info on generics
+is ignored in these jars).
+
+Upstream is still building with Jetty 8 so our bootstrap build must do
+the same.
+
+Change-Id: Ib8f471e5df40eb06da4f2d4ca6c2d3ab14f5dc99
+---
+ .../main/java/org/eclipse/tycho/test/util/HttpServer.java    |  5 ++---
+ .../tycho-bundles-target/tycho-bundles-target.target         | 12 ++++++------
+ .../java/org/eclipse/tycho/core/osgitools/OsgiManifest.java  | 12 ++++++------
+ tycho-surefire/pom.xml                                       |  2 +-
+ 4 files changed, 15 insertions(+), 16 deletions(-)
+
+diff --git a/tycho-bundles/org.eclipse.tycho.test.utils/src/main/java/org/eclipse/tycho/test/util/HttpServer.java b/tycho-bundles/org.eclipse.tycho.test.utils/src/main/java/org/eclipse/tycho/test/util/HttpServer.java
+index 47423e5..4b4c600 100644
+--- a/tycho-bundles/org.eclipse.tycho.test.utils/src/main/java/org/eclipse/tycho/test/util/HttpServer.java
++++ b/tycho-bundles/org.eclipse.tycho.test.utils/src/main/java/org/eclipse/tycho/test/util/HttpServer.java
+@@ -20,10 +20,9 @@ import java.util.Random;
+ import org.eclipse.jetty.security.ConstraintMapping;
+ import org.eclipse.jetty.security.ConstraintSecurityHandler;
+ import org.eclipse.jetty.security.HashLoginService;
+-import org.eclipse.jetty.server.AbstractNetworkConnector;
+ import org.eclipse.jetty.server.Connector;
+ import org.eclipse.jetty.server.Server;
+-import org.eclipse.jetty.server.ServerConnector;
++import org.eclipse.jetty.server.bio.SocketConnector;
+ import org.eclipse.jetty.servlet.ServletContextHandler;
+ import org.eclipse.jetty.servlet.ServletHolder;
+ import org.junit.rules.ExternalResource;
+@@ -81,7 +80,7 @@ public class HttpServer extends ExternalResource {
+ 
+     private static RunningServer startServerOnPort(int port) throws Exception {
+         Server jetty = new Server();
+-        AbstractNetworkConnector connector = new ServerConnector(jetty);
++	 Connector connector = new SocketConnector();
+         connector.setPort(port);
+         jetty.addConnector(connector);
+ 
+diff --git a/tycho-bundles/tycho-bundles-target/tycho-bundles-target.target b/tycho-bundles/tycho-bundles-target/tycho-bundles-target.target
+index 2a04214..400117a 100644
+--- a/tycho-bundles/tycho-bundles-target/tycho-bundles-target.target
++++ b/tycho-bundles/tycho-bundles-target/tycho-bundles-target.target
+@@ -2,16 +2,16 @@
+ <?pde version="3.8"?><target name="Target platform for Tycho's bundles" sequenceNumber="16">
+ <locations>
+ <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
+-<unit id="org.eclipse.equinox.executable.feature.group" version="3.6.0.v20130521-0416"/>
+-<unit id="org.eclipse.sdk.ide" version="4.3.0.I20130605-2000"/>
+-<unit id="org.eclipse.equinox.p2.sdk.feature.group" version="3.8.0.v20130604-2046"/>
+-<unit id="org.eclipse.equinox.core.sdk.feature.group" version="3.8.0.v20130529-1710"/>
++<unit id="org.eclipse.equinox.executable.feature.group"/>
++<unit id="org.eclipse.sdk.ide"/>
++<unit id="org.eclipse.equinox.p2.sdk.feature.group"/>
++<unit id="org.eclipse.equinox.core.sdk.feature.group"/>
+ <repository location="http://download.eclipse.org/releases/kepler/"/>
+ </location>
+ <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="slicer" includeSource="false" type="InstallableUnit">
+ <!-- required for surefire junit3 provider -->
+-<unit id="org.junit" version="3.8.2.v3_8_2_v20100427-1100"/>
+-<repository location="http://download.eclipse.org/releases/indigo"/>
++<unit id="org.junit"/>
++<repository location="http://download.eclipse.org/releases/indigo/201202240900"/>
+ </location>
+ </locations>
+ </target>
+diff --git a/tycho-core/src/main/java/org/eclipse/tycho/core/osgitools/OsgiManifest.java b/tycho-core/src/main/java/org/eclipse/tycho/core/osgitools/OsgiManifest.java
+index 1aec480..0eeb0fa 100644
+--- a/tycho-core/src/main/java/org/eclipse/tycho/core/osgitools/OsgiManifest.java
++++ b/tycho-core/src/main/java/org/eclipse/tycho/core/osgitools/OsgiManifest.java
+@@ -26,7 +26,7 @@ public class OsgiManifest {
+     private static final StandardExecutionEnvironment[] EMPTY_EXEC_ENV = new StandardExecutionEnvironment[0];
+ 
+     private String location;
+-    private Headers<String, String> headers;
++    private Headers headers;
+ 
+     // cache for parsed values of commonly used headers
+     private String bundleSymbolicName;
+@@ -80,7 +80,7 @@ public class OsgiManifest {
+     }
+ 
+     private String parseMandatoryFirstValue(String headerKey) throws InvalidOSGiManifestException {
+-        String value = headers.get(headerKey);
++        String value = (String) headers.get(headerKey);
+         if (value == null) {
+             throw new InvalidOSGiManifestException(location, "MANIFEST header '" + headerKey + "' not found");
+         }
+@@ -102,12 +102,12 @@ public class OsgiManifest {
+                 && "dir".equals(bundleShapeElements[0].getValue());
+     }
+ 
+-    public Headers<String, String> getHeaders() {
++    public Headers getHeaders() {
+         return headers;
+     }
+ 
+     public String getValue(String key) {
+-        return headers.get(key);
++        return (String) headers.get(key);
+     }
+ 
+     public String getBundleSymbolicName() {
+@@ -143,7 +143,7 @@ public class OsgiManifest {
+     }
+ 
+     private ManifestElement[] parseHeader(String key) {
+-        String value = headers.get(key);
++        String value = (String) headers.get(key);
+         if (value == null) {
+             return null;
+         }
+@@ -156,7 +156,7 @@ public class OsgiManifest {
+ 
+     public ManifestElement[] getManifestElements(String key) throws OsgiManifestParserException {
+         try {
+-            return ManifestElement.parseHeader(key, headers.get(key));
++            return ManifestElement.parseHeader(key, (String) headers.get(key));
+         } catch (BundleException e) {
+             throw new OsgiManifestParserException(location, e);
+         }
+diff --git a/tycho-surefire/pom.xml b/tycho-surefire/pom.xml
+index 7b9697c..43ab800 100644
+--- a/tycho-surefire/pom.xml
++++ b/tycho-surefire/pom.xml
+@@ -41,7 +41,7 @@
+ 		<repository>
+ 			<id>eclipse</id>
+ 			<layout>p2</layout>
+-			<url>http://download.eclipse.org/releases/indigo</url>
++			<url>http://download.eclipse.org/releases/indigo/201202240900</url>
+ 		</repository>
+ 	</repositories>
+ 
+-- 
+1.8.1.4
+

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<extension>
+  <exportedPackages>
+    <exportedPackage>org.eclipse.tycho</exportedPackage>
+    <exportedPackage>org.osgi.framework</exportedPackage>
+    <exportedPackage>org.eclipse.osgi</exportedPackage>
+    <exportedPackage>org.eclipse.sisu.equinox</exportedPackage>
+    <exportedPackage>org.eclipse.tycho.p2.resolver</exportedPackage>
+    
+    <exportedPackage>de.pdark.decentxml</exportedPackage>
+  </exportedPackages>
+
+  <exportedArtifacts>
+    <exportedArtifact>org.eclipse.tycho:org.eclipse.tycho.embedder.shared</exportedArtifact>
+    <exportedArtifact>org.eclipse.tycho:tycho-embedder-api</exportedArtifact>
+    <exportedArtifact>org.eclipse.tycho:tycho-metadata-model</exportedArtifact>
+    <exportedArtifact>org.eclipse.tycho:org.eclipse.tycho.core.shared</exportedArtifact>
+    <exportedArtifact>org.eclipse.tycho:tycho-core</exportedArtifact>
+    <exportedArtifact>org.eclipse.tycho:org.eclipse.tycho.p2.resolver.shared</exportedArtifact>
+    <exportedArtifact>org.eclipse.tycho:org.eclipse.tycho.p2.tools.shared</exportedArtifact>
+    <exportedArtifact>org.eclipse.tycho:tycho-p2-facade</exportedArtifact>
+    <exportedArtifact>org.eclipse.tycho:sisu-equinox-api</exportedArtifact>
+    <exportedArtifact>org.eclipse.tycho:sisu-equinox-embedder</exportedArtifact>
+    <exportedArtifact>org.eclipse.tycho:org.eclipse.osgi</exportedArtifact>
+    
+    <exportedArtifact>de.pdark:decentxml</exportedArtifact>
+  </exportedArtifacts>
+</extension>
